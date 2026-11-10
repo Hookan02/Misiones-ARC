@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ARC Raiders: las 137 misiones por mapa</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#eef1f4;--card:#fff;--ink:#17202a;--mute:#5d6b7a;--line:#d5dce3;--acc:#c77d0a;--accbg:#fbeccf;--ok:#2f7d5b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161d;--card:#1a232d;--ink:#e7edf3;--mute:#93a3b3;--line:#2b3744;--acc:#f0b24a;--accbg:#3a2c10;--ok:#58c79a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10161d;--card:#1a232d;--ink:#e7edf3;--mute:#93a3b3;--line:#2b3744;--acc:#f0b24a;--accbg:#3a2c10;--ok:#58c79a;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.45 "Barlow Semi Condensed",system-ui,sans-serif}
+main{max-width:720px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:30px;line-height:1.1;margin:0 0 4px;font-weight:700}
+.sub{color:var(--mute);margin:0 0 12px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+.tab{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 12px;font:600 16px "Barlow Semi Condensed",sans-serif;cursor:pointer;min-height:44px}
+.tab[aria-selected="true"]{background:var(--acc);border-color:var(--acc);color:#101010}
+.tab small{display:block;font-weight:400;font-size:13px}
+.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin:6px 0 10px}
+.bar i{display:block;height:100%;background:var(--ok);width:0;transition:width .25s}
+.tools{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:center;margin-bottom:10px;color:var(--mute)}
+.tools label{display:flex;gap:8px;align-items:center;cursor:pointer;min-height:36px}
+.tools button{background:none;border:0;color:var(--mute);text-decoration:underline;font:inherit;cursor:pointer;min-height:44px}
+.q{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;cursor:pointer}
+.q input{width:26px;height:26px;flex:none;margin-top:2px;accent-color:var(--ok)}
+.q.done{opacity:.5}.q.done .t{text-decoration:line-through}
+.q.lock{opacity:.8;border-style:dashed}
+.t{font-weight:700;font-size:19px}
+.who{font-weight:600;color:var(--acc);font-size:15px}
+.what{margin-top:2px}
+.req{margin-top:4px;font-size:14px;color:var(--mute)}
+.tag{display:inline-block;margin-top:4px;font-size:13px;background:var(--accbg);padding:1px 8px;border-radius:6px}
+.empty{text-align:center;color:var(--mute);padding:24px 0}
+.foot{color:var(--mute);font-size:14px;margin-top:20px}
+.q{display:block;cursor:default}
+.qh{display:flex;gap:12px;cursor:pointer}
+.steps{margin:10px 0 0 38px;display:grid;gap:4px}
+.st{display:flex;gap:10px;align-items:flex-start;cursor:pointer;min-height:32px;padding:2px 0}
+.st input{width:22px;height:22px;flex:none;margin-top:0;accent-color:var(--ok)}
+.st.off{opacity:.6}
+.st.dn span{text-decoration:line-through;opacity:.6}
+.st .tag{margin:0 0 0 4px}
+</style>
+</head>
+<body>
+<main>
+<h1>Misiones por mapa</h1>
+<p class="sub">137 misiones. Elige un mapa, marca cada paso que hagas y la misión se completa sola cuando terminas todos.</p>
+<div class="tabs" id="tabs" role="tablist"></div>
+<div class="bar"><i id="fill"></i></div>
+<div class="tools"><label><input type="checkbox" id="av" checked> Solo las que puedo hacer ya</label><label><input type="checkbox" id="hide" checked> Ocultar las hechas</label><button id="reset">Borrar marcas de este mapa</button></div>
+<div id="list"></div>
+<p class="foot">Nombres en inglés, como aparecen en el juego. Datos de RaiderBuddy y ARC Raiders Wiki; el juego se actualiza y puede haber misiones nuevas. Se guarda en este navegador.</p>
+</main>
+<script>
+var T={S:"Shani",C:"Celeste",T:"Tian Wen",A:"Apollo",L:"Lance",J:"Juanito",P:"Posh"};
+var MP={D:"Dam",B:"Buried City",S:"Spaceport",G:"Blue Gate",M:"Stella Montis",R:"Riven Tides",P:"Pendola Pass","*":"Cualquier mapa"};
+var Q=[
+["Picking Up The Pieces","S","*","","Visita una zona con icono de botín y saquea 3 contenedores."],
+["The First Nomads","S","SGM","","Blue Gate (Security Wing, antena de Pilgrim’s Peak) y Stella Montis (Communications wing, Hidden Bunker). Larga."],
+["Clearer Skies","S","*","Picking Up The Pieces","Destruye 3 ARC y entrega 3 ARC Alloy."],
+["Trash Into Treasure","S","*","Picking Up The Pieces","Consigue 6 Wires y 1 Battery."],
+["Off The Radar","S","*","Clearer Skies|Trash Into Treasure","Visita un Field Depot y repara la antena del techo."],
+["Hatch Repairs","S","*","A Bad Feeling","Repara las tuberías de un Raider Hatch."],
+["Reduced to Rubble","S","G","A First Foothold","Foto de la autopista colapsada, ve a Broken Earth e investiga las máquinas ARC."],
+["Tracks of the Beast","S","P","Exploring Pendola Pass","Northern Tracks, estación destruida; marca un Bully y un Skulker."],
+["Belly of the Beast","S","P","Tracks of the Beast|Sizing Things Up","Entra en el Emperor y busca 5 contenedores dentro."],
+["Cold Storage","S","M","In My Image","Registra un contenedor J Kozma Ventures; entrega Old World Books."],
+["Down to Earth","S","*","Hatch Repairs","Entrega un Field Crate en una Supply Station."],
+["With A Trace","S","G","Reduced to Rubble","Barren Clearing; inspecciona Adorned Wreckage y el dispositivo de comunicaciones."],
+["The Trifecta","S","*","Down to Earth","Destruye 2 Snitch, 2 Wasp y 2 Hornet con sus propulsores; entrega sus drivers."],
+["A Prime Specimen","S","G","The Clean Dream","Interactúa con un ARC Deforester y sáquealo."],
+["Dormant Barons","S","DSG","Greasing Her Palms|The Trifecta","Saquea un Baron Husk."],
+["Dust on the Wires","S","S","The Trifecta","Field Depot este, terminal de la torre norte del hangar y Scout Patrol Note."],
+["With a View","S","M","Snap and Salvage","Control Rooms junto a Assembly Line; activa el servidor; entrega Ion Sputter."],
+["Clamoring for Attention","S","G","Dormant Barons","Sirena (3 Wires) en Warehouse Complex, boom box (Battery) en Village, bocina de bus en Checkpoint."],
+["Mixed Signals","S","*","Dormant Barons","Destruye un Surveyor y entrega su Surveyor Vault."],
+["Waking the Grid","S","S","Dust on the Wires","Sensores en una Guard Tower, Security Control Center del Departure Building y Data Office de Arrival Building."],
+["A Lay of the Land","S","S","A Reveal in Ruins","Jiangsu Warehouse (notas), escáneres en el piso alto de Control Tower A6; entrega 1 LiDAR Scanner."],
+["Eyes in the Sky","S","DBS","A Lay of the Land","Instala un LiDAR en: torre de control (Dam), Communications Tower (Spaceport), cartel Galleria (Buried City)."],
+["Out of the Shadows","S","*","A Symbol of Unification|Sparks Fly","Destruye un Rocketeer y entrega su Driver."],
+["Our Presence up There","S","D","Back on Top","Pattern House: activa el interruptor y termina la antena del techo."],
+["Lost in Transmission","S","S","Our Presence up There","Sube a Control Tower A6 y conecta desde el terminal."],
+["Communication Hideout","S","B","Lost in Transmission","Red Tower (Old Town): batería al generador, enciéndelo y arranca el terminal."],
+["Into the Fray","S","*","Water Troubles|Communication Hideout","Destruye un Leaper y entrega su Pulse Unit."],
+["Combat Recon","S","B","Into the Fray|Out of the Shadows","Tres coberturas (garaje, buses de Marano Park, áticos de Main Street); destruye 2 Spotters."],
+["Bombing Run","S","*","Combat Recon","Destruye un Bombardier y entrega su Bombardier Cell."],
+["Deciphering The Data","S","S","Paving the Way","Magnetic Decryptor en Fuel Control y en el último piso de Arrival Building."],
+["A Dead End","S","G","Groundbreaking","Instalaciones de MANTIKOR, sala cerrada del Security Wing; entrega Dusty Film Reel."],
+["A Toxic Trail","S","D","Life of a Pharmacist","Toma de agua bajo Water Treatment Control, foto del camión del barril, registra el maletero."],
+["Fragmented Logs","S","M","A Dead End|Dust on the Wires","Repara terminal (1 Electrical Component) en Robotic Sandbox, enciende conductos, arranca el mainframe de Cultural Archives."],
+["The Stench of Corruption","S","S","A Toxic Trail","Vestuario del Departure Building, túneles bajo el Spaceport; llave en un Flushing Terminal."],
+["Furtive Meetings","S","M","Fragmented Logs","Tres puntos de reunión secretos (Medical Research, Sandbox B/Seed Vault, Cultural Archives)."],
+["Last Entry","S","M","Furtive Meetings","Seed Vault: puesto de trabajo, llave oculta y caja de depósito; entrega la documentación."],
+["Home to Roost","S","G","A Wrench in the Works","Fondo de los túneles, escanea un Android, vestuario de MANTIKOR, Confiscation Room."],
+["When Everything Falls","S","S","Empathetic Prototypes","Fotografía 7 puntos del Spaceport (garita, bus reforzado, brecha, Launch Towers…)."],
+["A Bad Feeling","C","*","Off The Radar","Busca en un ARC Probe o ARC Courier."],
+["Boarding the Frigate","C","*","Off The Radar","Sube a la Frigate; 100 de daño a Hydra, Vaporizer y Rocketeer."],
+["Exploring Pendola Pass","C","P","Off The Radar","Destruye 20 ARC, energía en Cielo Sereno Observatory, antena del Railyard, 3 contenedores en Commissary."],
+["Sizing Things Up","C","P","Off The Radar","Foto de la pierna del Emperor, inspecciona la sonda y analiza la pierna en Railroad Junction."],
+["Disrupting the Frigate","C","*","Boarding the Frigate","Destruye 3 Power Cores, saquea la carga, 3 Hydra, 2 Rocketeer, 2 Vaporizer."],
+["Wires Crossed","C","SBG","Exploring Pendola Pass","Antenas: Pilgrim’s Peak (Snitch Scanner), Launch Towers (Surveyor Vault), Grandioso Apartments (Sentinel Firing Core)."],
+["Celeste’s Teenage Rebellion","C","R","Celeste’s Childhood Drawings","Torre de Mulatierra Hill, campamento del hotel; suelda el generador y arranca el transmisor."],
+["Ruins and Reverberations","C","P","Wires Crossed","Spotter Relay en la antena del Observatory; suelda cables bajo la sala de control."],
+["Greasing Her Palms","C","DSB","A Better Use","Dam: sala cerrada de Water Treatment. Spaceport: Rocket Assembly. Buried: piso 6 del Space Travel Building."],
+["Keeping an Eye Out","C","G","The Clean Dream","Autopista colapsada al sur de Barren Clearing y refugio de Bilguun."],
+["Straight Record","C","D","Broken Monument","Victory Ridge: apaga 3 interruptores y la trampa EMP."],
+["Keeping the Memory","C","D","Straight Record","Restos en Formicai Hills: busca el casco y devuélvelo al memorial."],
+["A Balanced Harvest","C","D","Eyes in the Sky","Research & Administration, Lab 1 sobre recepción."],
+["After Rain Comes","C","B","Eyes in the Sky","Paneles solares inundados junto a Grandioso Apartments: 5 Wires y 2 Battery."],
+["Echoes of Victory Ridge","C","D","Keeping the Memory","Planes de batalla bajo la autopista de Victory Ridge; entrega Major Aiva’s Patch."],
+["Untended Garden","C","D","A Balanced Harvest","Hydroponic Dome Complex: archivo de datos y súbelo a un Field Depot."],
+["The Root of the Matter","C","B","Untended Garden","Research Building: seed vault; entrega Experimental Seed Sample."],
+["A Symbol of Unification","C","D","Unexpected Initiative","Formicai Outpost: iza la bandera sobre Red Lake."],
+["Water Troubles","C","D","After Rain Comes|The Root of the Matter","Flood Access Tunnel bajo Red Lake Balcony; toma muestra del agua."],
+["Celeste’s Journals","C","D","A Symbol of Unification","Recupera 2 diarios (South Swamp Outpost y puesto norte)."],
+["Source of the Contamination","C","D","Water Troubles","Water Treatment Building: Flood Spill Intake junto al pantano."],
+["Switching the Supply","C","S","Source of the Contamination","Túneles bajo el Spaceport: gira la válvula."],
+["Power Out","C","S","Prescriptions of the Past","Subestación al sur: instala el fusible y restaura la energía."],
+["Flickering Threat","C","D","Power Out","Generator Room: repara, ventilación e interruptor bajo las escaleras."],
+["Bees!","C","G","Flickering Threat","Olive Grove: registra las colmenas."],
+["Tribute to Toledo","C","*","Life of a Pharmacist","Consigue un Power Rod."],
+["Worth Your Salt","C","S","Groundbreaking","Rocket Assembly: Battery Prototype, cárgala y entrégala."],
+["A Rising Tide","C","DB","A Dead End","Buried: apartamento del capataz al sur de Piazza Roma. Dam: Power Generation Complex."],
+["Digging Up Dirt","C","B","Tribute to Toledo","Santa Maria Houses (Old Town): Dead Drop del patio."],
+["Turnabout","C","S","Digging Up Dirt","North Trench Tower (requiere llave): sube los archivos."],
+["Line in the Sand","C","B","Last Entry","Marano Station: robo del tren y sótano del apartamento del comerciante."],
+["A Wrench in the Works","C","S","Safe Harbor","Buses junto a la puerta oeste y alijo en Water Towers."],
+["Someone Else’s Shoes","C","M","Home to Roost","Escanea un Android, Research Lab 3 en Medical Bay y Control Room de Western Tunnels."],
+["The Right Tool","T","*","A Bad Feeling","Destruye un Fireball, un Hornet y un Turret."],
+["A Better Use","T","DSBG","The Right Tool","Pide un Supply Drop en una Call Station y sáquealo."],
+["Collision Course","T","*","Safe Passage","Destruye un Comet y entrega su Comet Igniter."],
+["Snap and Salvage","T","M","Cold Storage","Foto de un Rover en Sandbox, papeles del Security Checkpoint; entrega Flow Controller y Magnetron."],
+["Outstanding Balance","T","G","The Clean Dream","Alijo de Dodger en Traffic Tunnel y su nota junto a la antena de Pilgrim’s Peak."],
+["Settled in Full","T","*","Outstanding Balance","Destruye un Bastion y entrega su Bastion Cell."],
+["Stable Housing","T","M","With a View","Security Bridge: caja fuerte, llave con Access Card Printer; entrega Heartwood Blueprints."],
+["What We Left Behind","T","DSB","Dormant Barons","Buried: Raider Camp bajo el garaje. Dam: South Swamp Outpost. Spaceport: Bilguun’s Hideout."],
+["Broken Monument","T","D","What We Left Behind","Scrap Yard: brújula, cinta de vídeo y raciones; entrégalas."],
+["Marked for Death","T","B","Broken Monument","Su Durante Warehouses (Outskirts), alijo de Tian Wen y sigue las pistas."],
+["Market Correction","T","B","Marked for Death","Alijo cerca de Marano Station: sabotéalo."],
+["Eyes on the Prize","T","B","Market Correction","Terraza al suroeste de Southern Station (toldos azules): 3 Wires al panel solar."],
+["Industrial Espionage","T","B","Eyes on the Prize","Alijo junto a la gasolinera: entrega la Burletta y planta el micrófono."],
+["Unexpected Initiative","T","B","Industrial Espionage|Echoes of Victory Ridge","Moisture Meter (Grandioso Apartments) y Nutrient Meter (Piazza Roma)."],
+["The Major’s Footlocker","T","D","A Symbol of Unification","Recuerdos del Major Aiva en apartamentos al noroeste de Dam."],
+["Back on Top","T","DSBG","The Major’s Footlocker|Eyes in the Sky|Celeste’s Journals","Marca: Pattern House (Dam), torre blanca (Blue Gate), South Trench Tower (Spaceport), mural (Buried)."],
+["Armored Transports","T","G","With A Trace|A New Type of Plant","Checkpoint: tarjeta en las garitas y puerta trasera del coche blindado."],
+["Safe Harbor","T","R","Line in the Sand","Pista del personal de cocina, dibujo, desentierra la pieza; entrega Precision Gimbal."],
+["Nothing Ventured","A","*","","Destruye 3 Comet, 5 Rocketeer, 2 Sentinel; entrega sus drivers/igniters, 6 ARC Circuitry y 6 ARC Motion Core."],
+["Nothing Gained","A","*","Nothing Ventured","Destruye un Matriarch y un Queen; entrega sus reactores."],
+["A First Foothold","A","G","Off The Radar","Plataforma de observación, comms en Olive Grove, antenas de la iglesia, placas en Trapper’s Glade."],
+["Battening Down","A","R","Off The Radar","Fotos de grietas del dique, muestra de la orilla, repara tubería de aceite al noreste."],
+["Shoring Up Defenses","A","R","Off The Radar","5 Wasp, 3 Firefly, ARC Alloy en una grúa y tapia ventanas del hotel."],
+["To The Skies","A","*","Off The Radar","Escanea una Crashed ARC Probe y un ARC Courier."],
+["Safe Passage","A","*","A Bad Feeling","Destruye 2 ARC con una granada explosiva."],
+["Bait, Fetch, Blast","A","P","Tracks of the Beast","Destruye un Bully (cabeza y 4 patas); entrega Bully Fragmenter."],
+["What Goes Around","A","*","Safe Passage","Destruye un ARC con un Fireball Burner."],
+["Sparks Fly","A","*","What Goes Around","Destruye un Hornet con Trigger ’Nade o Snap Blast."],
+["The Clean Dream","A","SG","With A Trace","Spaceport: túneles y Filtration System. Blue Gate: Maintenance Bunker y planos."],
+["The League","A","DB","Sparks Fly","Balón desinflado, bomba de bici; foto de portería (Dam) y revistas (Buried)."],
+["Movie Night","A","*","With a View","Portable TV y pila de cintas (Cultural Archives, Stella Montis)."],
+["Test Case","A","*","The League","Entrega Hornet Driver, Fireball Burner y Firefly Burner."],
+["A Warm Place To Rest","A","B","Switching the Supply","Campamento de la autopista: sigue marcas rojas e inspecciona la tumba."],
+["Paving the Way","A","DBG","Into the Fray","Edificio ENELICA y nota del tablón; Buried: piso alto sobre Convinio (Piazza Roma)."],
+["Espresso","A","*","Bees!","Salva piezas de una máquina de espresso."],
+["Groundbreaking","A","G","Deciphering The Data","Llave de torre, sala de Pilgrim’s Peak, foto del proyecto de viviendas abandonado."],
+["Building a Library","A","B","Digging Up Dirt","Biblioteca del City Center: libro romántico, policíaco y de aventuras."],
+["Celeste’s Childhood Drawings","L","R","Shoring Up Defenses","Habitación de Celeste joven en Hotel Panorama Azzurro."],
+["In My Image","L","M","A Bad Feeling","Entra a Stella Montis y registra 3 Androids."],
+["Doctor’s Orders","L","*","Greasing Her Palms","Consigue 1 Syringe, 2 Antiseptic, 1 Durable Cloth y 1 Great Mullein."],
+["Medical Merchandise","L","DSB","Doctor’s Orders","Contenedores: Departure Building (2), Hospital de Buried (3), Research & Administration (2)."],
+["A Reveal in Ruins","L","B","Medical Merchandise","ESR Analyzer en una farmacia."],
+["Prescriptions of the Past","L","S","A Warm Place To Rest","Sala de examen del Departure Building: busca los registros."],
+["Life of a Pharmacist","L","B","Espresso","Arbusto Farmacia junto a la autopista: documenta 4 cosas del farmacéutico."],
+["On Deaf Ears","L","M","Worth Your Salt|Snap and Salvage","Registros de recepción, notas de la conferencia, prototipos y logs en Assembly Workshops."],
+["On The Map","L","S","On Deaf Ears","Transmite tu ubicación en 4 puntos y marca el contenedor con lona."],
+["A New Type of Plant","L","D","Building a Library","Planta junto al Baron Husk (Old Battleground); entrégala."],
+["Empathetic Prototypes","L","S","Someone Else’s Shoes","Trench Towers: desactiva la cerradura magnética, registra la caja; entrega Empathy Core."],
+["Clean Hands","J","P","Off The Radar","Encuentra el Nomad Camp bajo el Railyard."],
+["Taking Stock","J","DSBM","Clean Hands","Foto escultura (Stella), foto Baron Husk (Spaceport), marca Bombardier (Dam) y Bastion (Buried); 3 Industrial Batteries."],
+["A Path Not Yours","J","G","Taking Stock","Sendero nómada bajo el Highway Collapse hasta el escondite; entrega Broken Compass."],
+["Action Economy","P","*","","1000 de daño con una Hairpin."],
+["Beam Resonance Tech","P","*","","1500 de daño a Vaporizers con una Equalizer en una partida."],
+["Burst Assembly Recovery","P","*","","Destruye 3 Shredders con una Raider Tool."],
+["Compact Combustion Charges","P","*","","3000 de daño con Blaze Grenades."],
+["Embedded Blast Engineering","P","*","","1000 de daño con Light Impact Grenades a Firefly, Hornet, Fireball y Surveyor."],
+["Extended Burst Cycles","P","*","","10000 de daño con Burst Burletta o Charged Burst Aphelion."],
+["High-Voltage Exposure","P","*","","Destruye 5 ARC Turbines."],
+["Magazine Geometry 101","P","*","","15000 de daño a un Bastion con Rattler y destruye 1."],
+["Shield Stress Testing","P","*","","700 de daño a Raiders."],
+["Solid-Core Casting Tech","P","*","","Destruye 50 ARC voladores con escopetas."],
+["Sprint Shooting","P","*","","Visita 7 lugares de Pendola Pass (Electrical Substation, Truck Stop, Old Town, Almatera Station…)."],
+["Targeted Component Trial","P","*","","Destruye 40 propulsores de ARC voladores."],
+["Thermite-Tipped Rounds","P","*","","Destruye 30 Fireballs con Explosive Mines."],
+["Top Mounted Optics Retrofittings","P","*","","Ve a Pilgrim’s Peak (Blue Gate) y haz 1000 de daño con la Osprey."],
+["Trigger Reset Systems","P","*","","Destruye 5 Skulkers con una Raider Tool."]
+];
+var TABS=["D","B","S","G","M","R","P","*"];
+var SEED={};
+var ACTIVE=[];
+var STEPS={
+"The First Nomads":[["G","Security Wing"],["G","Antena de Pilgrim’s Peak"],["M","Communications Wing"],["M","Hidden Bunker"]],
+"Reduced to Rubble":[["G","Foto de la autopista colapsada"],["G","Ir a Broken Earth"],["G","Investigar las máquinas ARC"]],
+"Belly of the Beast":[["P","Entrar en el Emperor y explorarlo"],["P","Buscar 5 contenedores dentro"]],
+"With A Trace":[["G","Inspeccionar Adorned Wreckage"],["G","Inspeccionar el dispositivo de comunicaciones"]],
+"The Trifecta":[["*","Destruir 2 Snitch"],["*","Destruir 2 Wasp"],["*","Destruir 2 Hornet"],["*","Entregar sus drivers y propulsores"]],
+"Dust on the Wires":[["S","Field Depot este"],["S","Terminal de la torre norte del hangar"],["S","Scout Patrol Note"]],
+"Clamoring for Attention":[["G","Sirena (3 Wires) en Warehouse Complex"],["G","Boom box (Battery) en Village"],["G","Bocina de bus en Checkpoint"]],
+"Waking the Grid":[["S","Sensores en una Guard Tower"],["S","Security Control Center (Departure Building)"],["S","Data Office (Arrival Building)"]],
+"A Lay of the Land":[["S","Notas en Jiangsu Warehouse"],["S","Escáneres en el piso alto de Control Tower A6"],["*","Entregar 1 LiDAR Scanner"]],
+"Eyes in the Sky":[["D","Instalar LiDAR en la torre de control"],["S","Instalar LiDAR en Communications Tower"],["B","Instalar LiDAR en el cartel Galleria"]],
+"Our Presence up There":[["D","Activar el interruptor en Pattern House"],["D","Terminar la antena del techo"]],
+"Communication Hideout":[["B","Batería al generador (Red Tower)"],["B","Encender el generador"],["B","Arrancar el terminal"]],
+"Combat Recon":[["B","Cobertura: garaje"],["B","Cobertura: buses de Marano Park"],["B","Cobertura: áticos de Main Street"],["B","Destruir 2 Spotters"]],
+"Deciphering The Data":[["S","Magnetic Decryptor en Fuel Control"],["S","Magnetic Decryptor en el último piso de Arrival Building"]],
+"A Dead End":[["G","Instalaciones de MANTIKOR"],["G","Sala cerrada del Security Wing"],["G","Entregar Dusty Film Reel"]],
+"A Toxic Trail":[["D","Toma de agua bajo Water Treatment Control"],["D","Foto del camión del barril"],["D","Registrar el maletero"]],
+"Fragmented Logs":[["M","Reparar terminal en Robotic Sandbox"],["M","Encender los conductos"],["M","Arrancar el mainframe de Cultural Archives"]],
+"The Stench of Corruption":[["S","Vestuario del Departure Building"],["S","Túneles bajo el Spaceport"],["S","Llave en un Flushing Terminal"]],
+"Furtive Meetings":[["M","Medical Research"],["M","Sandbox B / Seed Vault"],["M","Cultural Archives"]],
+"Last Entry":[["M","Puesto de trabajo del Seed Vault"],["M","Llave oculta"],["M","Caja de depósito"],["M","Entregar la documentación"]],
+"Home to Roost":[["G","Escanear un Android"],["G","Vestuario de MANTIKOR"],["G","Confiscation Room"]],
+"Exploring Pendola Pass":[["P","Destruir 20 ARC"],["P","Energía en Cielo Sereno Observatory"],["P","Antena del Railyard"],["P","3 contenedores en Commissary"]],
+"Sizing Things Up":[["P","Foto de la pierna del Emperor"],["P","Inspeccionar la sonda"],["P","Analizar la pierna en Railroad Junction"]],
+"Wires Crossed":[["G","Antena de Pilgrim’s Peak (Snitch Scanner)"],["S","Antena de Launch Towers (Surveyor Vault)"],["B","Antena de Grandioso Apartments (Sentinel Firing Core)"]],
+"Ruins and Reverberations":[["P","Spotter Relay en la antena del Observatory"],["P","Soldar cables bajo la sala de control"]],
+"Greasing Her Palms":[["D","Sala cerrada de Water Treatment"],["S","Rocket Assembly"],["B","Piso 6 del Space Travel Building"]],
+"Keeping an Eye Out":[["G","Autopista colapsada"],["G","Refugio de Bilguun"]],
+"Straight Record":[["D","Activar los 3 interruptores en Victory Ridge"],["D","Apagar la trampa EMP"]],
+"Celeste’s Journals":[["D","Diario en South Swamp Outpost"],["D","Diario en el puesto norte"]],
+"Flickering Threat":[["D","Reparar la Generator Room"],["D","Ventilación"],["D","Interruptor bajo las escaleras"]],
+"A Rising Tide":[["B","Apartamento del capataz (Piazza Roma)"],["D","Power Generation Complex"]],
+"Line in the Sand":[["B","Robo del tren en Marano Station"],["B","Sótano del apartamento del comerciante"]],
+"A Wrench in the Works":[["S","Buses junto a la puerta oeste"],["S","Alijo en Water Towers"]],
+"Someone Else’s Shoes":[["M","Escanear un Android"],["M","Research Lab 3 en Medical Bay"],["M","Control Room de Western Tunnels"]],
+"Celeste’s Teenage Rebellion":[["R","Torre de Mulatierra Hill"],["R","Campamento del hotel"],["R","Soldar el generador"],["R","Arrancar el transmisor"]],
+"Disrupting the Frigate":[["*","Destruir 3 Power Cores"],["*","Saquear la carga"],["*","Destruir 3 Hydra"],["*","Destruir 2 Rocketeer"],["*","Destruir 2 Vaporizer"]],
+"What We Left Behind":[["B","Raider Camp bajo el garaje"],["D","South Swamp Outpost"],["S","Bilguun’s Hideout"]],
+"Snap and Salvage":[["M","Foto de un Rover en Sandbox"],["M","Papeles del Security Checkpoint"],["M","Entregar Flow Controller y Magnetron"]],
+"Outstanding Balance":[["G","Alijo de Dodger en Traffic Tunnel"],["G","Nota junto a la antena de Pilgrim’s Peak"]],
+"Industrial Espionage":[["B","Entregar la Burletta en el alijo"],["B","Plantar el micrófono"]],
+"Unexpected Initiative":[["B","Moisture Meter (Grandioso Apartments)"],["B","Nutrient Meter (Piazza Roma)"]],
+"Back on Top":[["D","Marcar Pattern House"],["G","Marcar la torre blanca"],["S","Marcar South Trench Tower"],["B","Marcar el mural"]],
+"Armored Transports":[["G","Tarjeta en las garitas del Checkpoint"],["G","Puerta trasera del coche blindado"]],
+"Safe Harbor":[["R","Pista del personal de cocina"],["R","Dibujo"],["R","Desenterrar la pieza"]],
+"Nothing Ventured":[["*","Destruir 3 Comet y 5 Rocketeer"],["*","Destruir 2 Sentinel"],["*","Entregar drivers e igniters"],["*","6 ARC Circuitry"],["*","6 ARC Motion Core"]],
+"A First Foothold":[["G","Plataforma de observación"],["G","Comms en Olive Grove"],["G","Antenas de la iglesia"],["G","Placas en Trapper’s Glade"]],
+"Battening Down":[["R","Fotos de las grietas del dique"],["R","Muestra de la orilla"],["R","Reparar la tubería de aceite"]],
+"Shoring Up Defenses":[["R","Destruir 5 Wasp y 3 Firefly"],["R","ARC Alloy en una grúa"],["R","Tapiar las ventanas del hotel"]],
+"To The Skies":[["*","Escanear una Crashed ARC Probe"],["*","Escanear un ARC Courier"]],
+"The Clean Dream":[["S","Túneles y Filtration System"],["G","Maintenance Bunker y planos"]],
+"The League":[["*","Balón desinflado y bomba de bici"],["D","Foto de la portería"],["B","Revistas"]],
+"Paving the Way":[["*","Nota del tablón en el edificio ENELICA"],["B","Piso alto sobre Convinio (Piazza Roma)"]],
+"Groundbreaking":[["G","Llave de la torre"],["G","Sala de Pilgrim’s Peak"],["G","Foto del proyecto de viviendas abandonado"]],
+"Building a Library":[["B","Libro romántico"],["B","Libro policíaco"],["B","Libro de aventuras"]],
+"Medical Merchandise":[["S","Departure Building: 2 contenedores"],["B","Hospital: 3 contenedores"],["D","Research & Administration: 2 contenedores"]],
+"Doctor’s Orders":[["*","1 Syringe"],["*","2 Antiseptic"],["*","1 Durable Cloth"],["*","1 Great Mullein"]],
+"On Deaf Ears":[["M","Registros de recepción"],["M","Notas de la conferencia"],["M","Prototipos"],["M","Logs en Assembly Workshops"]],
+"On The Map":[["S","Transmitir tu ubicación en 4 puntos"],["S","Marcar el contenedor con lona"]],
+"Empathetic Prototypes":[["S","Desactivar la cerradura magnética"],["S","Registrar la caja"],["S","Entregar Empathy Core"]],
+"Taking Stock":[["M","Foto de la escultura"],["S","Foto del Baron Husk"],["D","Marcar un Bombardier"],["B","Marcar un Bastion"],["*","Entregar 3 Industrial Batteries"]],
+"A Path Not Yours":[["G","Seguir el sendero hasta el escondite"],["G","Entregar Broken Compass"]]
+};
+var done={},sd={},cur="D";
+try{var s=localStorage.getItem("arc137c");done=s?JSON.parse(s):SEED}catch(e){done=SEED}
+try{sd=JSON.parse(localStorage.getItem("arc137s")||"{}")}catch(e){}
+function save(){try{localStorage.setItem("arc137c",JSON.stringify(done));localStorage.setItem("arc137s",JSON.stringify(sd))}catch(e){}}
+function sk(n,i){return n+"#"+i}
+function stepDone(n,i){return done[n]||sd[sk(n,i)]}
+function setQuest(n,on){if(on)done[n]=1;else delete done[n];(STEPS[n]||[]).forEach(function(s,i){if(on)sd[sk(n,i)]=1;else delete sd[sk(n,i)]})}
+function setStep(n,i,on){
+ if(done[n])STEPS[n].forEach(function(s,j){sd[sk(n,j)]=1});
+ if(on)sd[sk(n,i)]=1;else delete sd[sk(n,i)];
+ if(STEPS[n].every(function(s,j){return sd[sk(n,j)]}))done[n]=1;else delete done[n];
+}
+function pre(q){return q[3]?q[3].split("|"):[]}
+function ok(q){return pre(q).every(function(p){return done[p]})}
+function inMap(q,m){return q[2].indexOf(m)>-1}
+function draw(){
+ var tabs=document.getElementById("tabs");tabs.innerHTML="";
+ TABS.forEach(function(m){
+  var l=Q.filter(function(q){return inMap(q,m)}),d=l.filter(function(q){return done[q[0]]}).length;
+  var b=document.createElement("button");b.className="tab";b.setAttribute("role","tab");b.setAttribute("aria-selected",m===cur);
+  b.innerHTML=MP[m]+"<small>"+d+"/"+l.length+"</small>";b.onclick=function(){cur=m;draw()};tabs.appendChild(b)});
+ var L=Q.filter(function(q){return inMap(q,cur)}),nd=L.filter(function(q){return done[q[0]]}).length;
+ document.getElementById("fill").style.width=(100*nd/L.length)+"%";
+ var av=document.getElementById("av").checked,hide=document.getElementById("hide").checked;
+ var rank=function(q){return done[q[0]]?2:(ACTIVE.indexOf(q[0])>-1?-1:(ok(q)?0:1))};
+ var S=L.filter(function(q){var d=done[q[0]];if(hide&&d)return false;if(av&&!d&&!ok(q))return false;return true});
+ S.sort(function(a,b){return rank(a)-rank(b)});
+ var list=document.getElementById("list");list.innerHTML="";
+ S.forEach(function(q){
+  var n=q[0],d=done[n],o=ok(q),st=STEPS[n]||[],el=document.createElement("div");
+  el.className="q"+(d?" done":(o?"":" lock"));
+  var miss=pre(q).filter(function(p){return !done[p]});
+  var maps=q[2]==="*"?"":q[2].split("").map(function(c){return MP[c]}).join(", ");
+  var nsd=st.filter(function(s,i){return stepDone(n,i)}).length;
+  var h='<label class="qh"><input type="checkbox"'+(d?" checked":"")+'><div><div class="t">'+n+'</div><div class="who">'+T[q[1]]+(ACTIVE.indexOf(n)>-1&&!d?" · en curso":"")+'</div>'+(st.length?"":'<div class="what">'+q[4]+'</div>')+(miss.length&&!d?'<div class="req">Antes: '+miss.join(", ")+'</div>':"")+(q[2].length>1&&q[2]!=="*"?'<span class="tag">Se hace en: '+maps+'</span> ':"")+(st.length?'<span class="tag">Pasos '+nsd+'/'+st.length+'</span>':"")+'</div></label>';
+  var idx=st.map(function(s,i){return i});
+  idx.sort(function(a,b){var ra=(st[a][0]===cur||st[a][0]==="*")?0:1,rb=(st[b][0]===cur||st[b][0]==="*")?0:1;return ra-rb||a-b});
+  if(st.length)h+='<div class="steps">'+idx.map(function(i){var s=st[i],dn=stepDone(n,i),here=s[0]===cur||s[0]==="*";return '<label class="st'+(dn?" dn":"")+(here?"":" off")+'"><input type="checkbox" data-i="'+i+'"'+(dn?" checked":"")+'><span>'+s[1]+(here?"":' <b class="tag">'+MP[s[0]]+'</b>')+'</span></label>'}).join("")+'</div>';
+  el.innerHTML=h;
+  el.querySelector(".qh input").onchange=function(e){setQuest(n,e.target.checked);save();draw()};
+  el.querySelectorAll(".st input").forEach(function(c){c.onchange=function(e){setStep(n,+c.getAttribute("data-i"),e.target.checked);save();draw()}});
+  list.appendChild(el);
+ });
+ if(!S.length)list.innerHTML='<div class="empty">'+(nd===L.length?"Todo hecho en este mapa.":"No hay misiones disponibles ahora aquí. Quita el filtro para ver las bloqueadas.")+'</div>';
+}
+document.getElementById("av").onchange=draw;document.getElementById("hide").onchange=draw;
+document.getElementById("reset").onclick=function(){Q.forEach(function(q){if(inMap(q,cur))setQuest(q[0],false)});save();draw()};
+draw();
+</script>
+</body>
+</html>
